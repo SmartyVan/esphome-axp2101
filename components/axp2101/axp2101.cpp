@@ -408,13 +408,10 @@ void AXP2101Component::ReadBuff( uint8_t Addr , uint8_t Size , uint8_t *Buff )
 }
 
 void AXP2101Component::UpdateBrightness() {
-    if (brightness_ == curr_brightness_) {
-        return;
-    }
+    if (brightness_ == curr_brightness_) return;
     ESP_LOGD(TAG, "Brightness=%f (Curr: %f)", brightness_, curr_brightness_);
     curr_brightness_ = brightness_;
 
-    // If slider at zero, disable BLDO1 (turn off backlight)
     if (brightness_ <= 0.0f) {
         ESP_LOGD(TAG, "Brightness zero; disabling BLDO1");
         PMU.disableBLDO1();
@@ -422,17 +419,13 @@ void AXP2101Component::UpdateBrightness() {
     }
     PMU.enableBLDO1();
 
-    // Map brightness [0.0–1.0] into BLDO1 steps [1..30] (600 mV–3500 mV)
-    const uint8_t min_step = 1;
-    const uint8_t max_step = 30;
-    uint8_t step = static_cast<uint8_t>(brightness_ * (max_step - min_step) + 0.5f) + min_step;
-    if (step > max_step) {
-        step = max_step;
-    }
+    // Use actual visible range [20..30] for BLDO1_CFG steps
+    const uint8_t min_vis_step = 20;
+    const uint8_t max_step     = 30;
+    uint8_t step = static_cast<uint8_t>(brightness_ * (max_step - min_vis_step) + 0.5f) + min_vis_step;
+    if (step > max_step) step = max_step;
 
-    // Write step into BLDO1_CFG (0x96): clear bits 4:0 then OR in step
-    uint8_t reg = Read8bit(0x96) & 0xE0;
-    reg |= (step & 0x1F);
+    uint8_t reg = (Read8bit(0x96) & 0xE0) | (step & 0x1F);
     ESP_LOGD(TAG, "Setting BLDO1 step %u for brightness=%f", step, brightness_);
     Write1Byte(0x96, reg);
 }
