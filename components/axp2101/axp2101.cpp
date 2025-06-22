@@ -407,19 +407,25 @@ void AXP2101Component::ReadBuff( uint8_t Addr , uint8_t Size , uint8_t *Buff )
     this->read_bytes(Addr, Buff, Size);
 }
 
-void AXP2101Component::UpdateBrightness()
-{
-    if (brightness_ == curr_brightness_)
-    {
+void AXP2101Component::UpdateBrightness() {
+    if (brightness_ == curr_brightness_) {
         return;
     }
-
     ESP_LOGD(TAG, "Brightness=%f (Curr: %f)", brightness_, curr_brightness_);
     curr_brightness_ = brightness_;
 
-    // Map brightness_ [0.0–1.0] to BLDO1 voltage [500–3500] mV
-    const uint16_t v_min = 500;
-    const uint16_t v_max = 3500;
+    // If slider at zero, turn display off by disabling BLDO1
+    if (brightness_ <= 0.01f) {
+        ESP_LOGD(TAG, "Brightness near zero; disabling BLDO1");
+        PMU.disableBLDO1();
+        return;
+    }
+    // Ensure BLDO1 is enabled for any non-zero brightness
+    PMU.enableBLDO1();
+
+    // Map brightness_ [0.0–1.0] (excluding zero) to BLDO1 voltage [1000–3300] mV
+    const uint16_t v_min = 1000;
+    const uint16_t v_max = 3300;
     uint16_t vol = v_min + static_cast<uint16_t>(brightness_ * (v_max - v_min));
     if (vol > v_max) vol = v_max;
     ESP_LOGD(TAG, "Setting BLDO1 voltage to %u mV for brightness=%f", vol, brightness_);
