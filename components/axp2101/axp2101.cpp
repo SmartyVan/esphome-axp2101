@@ -417,7 +417,6 @@ void AXP2101Component::UpdateBrightness() {
         PMU.disableBLDO1();
         return;
     }
-    PMU.enableBLDO1();
 
     // Use actual visible range [20..30] for BLDO1_CFG steps
     const uint8_t min_vis_step = 20;
