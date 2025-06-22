@@ -417,22 +417,13 @@ void AXP2101Component::UpdateBrightness()
     ESP_LOGD(TAG, "Brightness=%f (Curr: %f)", brightness_, curr_brightness_);
     curr_brightness_ = brightness_;
 
-    const uint8_t c_min = 7;
-    const uint8_t c_max = 12;
-    auto ubri = c_min + static_cast<uint8_t>(brightness_ * (c_max - c_min));
-
-    if (ubri > c_max)
-    {
-        ubri = c_max;
-    }
-    switch (this->model_) {
-      case AXP2101_M5CORE2:
-      {
-        uint8_t buf = Read8bit( 0x27 );
-        Write1Byte( 0x27 , ((buf & 0x80) | (ubri << 3)) );
-        break;
-      }
-    }
+    // Map brightness_ [0.0–1.0] to BLDO1 voltage [500–3500] mV
+    const uint16_t v_min = 500;
+    const uint16_t v_max = 3500;
+    uint16_t vol = v_min + static_cast<uint16_t>(brightness_ * (v_max - v_min));
+    if (vol > v_max) vol = v_max;
+    ESP_LOGD(TAG, "Setting BLDO1 voltage to %u mV for brightness=%f", vol, brightness_);
+    PMU.setBLDO1Voltage(vol);
 }
 
 bool AXP2101Component::GetBatState()
