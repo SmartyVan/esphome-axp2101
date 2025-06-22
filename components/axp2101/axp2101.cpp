@@ -414,25 +414,12 @@ void AXP2101Component::UpdateBrightness() {
     ESP_LOGD(TAG, "Brightness=%f (Curr: %f)", brightness_, curr_brightness_);
     curr_brightness_ = brightness_;
 
-    // AXP2101 BLDO1 has 31 steps from 500 mV (step 0) to 3500 mV (step 30)
-    const uint8_t total_steps = 31;
-    // Calculate step [0..30] with nearest rounding
-    uint8_t step = static_cast<uint8_t>(brightness_ * (total_steps - 1) + 0.5f);
-    
-    if (step == 0) {
-        ESP_LOGD(TAG, "Brightness step 0; disabling BLDO1");
-        PMU.disableBLDO1();
-        return;
-    }
-    // Ensure BLDO1 is enabled for any non-zero step
-    PMU.enableBLDO1();
-
-    // Compute voltage: 500 mV + step * 100 mV
-    uint16_t vol = 500 + static_cast<uint16_t>(step) * 100;
-    // Clamp to maximum 3500 mV
-    if (vol > 3500) vol = 3500;
-
-    ESP_LOGD(TAG, "Setting BLDO1 step %u => %u mV for brightness=%f", step, vol, brightness_);
+    // Map brightness [0.0–1.0] to BLDO1 voltage [500–3500] mV
+    const uint16_t v_min = 500;
+    const uint16_t v_max = 3500;
+    uint16_t vol = v_min + static_cast<uint16_t>(brightness_ * (v_max - v_min));
+    if (vol > v_max) vol = v_max;
+    ESP_LOGD(TAG, "Setting BLDO1 voltage to %u mV", vol);
     PMU.setBLDO1Voltage(vol);
 }
 
