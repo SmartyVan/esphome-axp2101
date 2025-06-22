@@ -414,13 +414,20 @@ void AXP2101Component::UpdateBrightness() {
     ESP_LOGD(TAG, "Brightness=%f (Curr: %f)", brightness_, curr_brightness_);
     curr_brightness_ = brightness_;
 
-    // Map brightness [0.0–1.0] to BLDO1 voltage [500–3500] mV
-    const uint16_t v_min = 500;
-    const uint16_t v_max = 3500;
-    uint16_t vol = v_min + static_cast<uint16_t>(brightness_ * (v_max - v_min));
-    if (vol > v_max) vol = v_max;
-    ESP_LOGD(TAG, "Setting BLDO1 voltage to %u mV", vol);
-    PMU.setBLDO1Voltage(vol);
+    // AXP2101 BLDO1_CFG register: bits 7-5 reserved, bits 4-0 = output step (0..30)
+    const uint8_t max_step = 30;
+    // Compute nearest step value
+    uint8_t step = static_cast<uint8_t>(brightness_ * max_step + 0.5f);
+    if (step > max_step) {
+        step = max_step;
+    }
+
+    // Read current BLDO1_CFG (register 0x96), clear step bits, then set new step
+    uint8_t reg = Read8bit(0x96);
+    reg &= 0xE0;            // clear bits 4:0
+    reg |= (step & 0x1F);   // set new step
+    ESP_LOGD(TAG, "Setting BLDO1 step %u for brightness=%f", step, brightness_);
+    Write1Byte(0x96, reg);
 }
 
 bool AXP2101Component::GetBatState()
