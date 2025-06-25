@@ -27,6 +27,10 @@ void setFlag(void)
     pmu_flag = true;
 }
 
+
+namespace esphome {
+namespace axp2101 {
+
 void AXP2101Component::set_lcd_enabled(bool on) {
     if (on) {
         PMU.enableALDO4();  // ALDO4 powers the LCD
@@ -34,6 +38,9 @@ void AXP2101Component::set_lcd_enabled(bool on) {
         PMU.disableALDO4();
     }
 }
+
+}  // namespace axp2101
+}  // namespace esphome
 
 namespace esphome {
 namespace axp2101 {
