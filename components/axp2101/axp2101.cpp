@@ -27,6 +27,14 @@ void setFlag(void)
     pmu_flag = true;
 }
 
+void AXP2101Component::set_lcd_enabled(bool on) {
+    if (on) {
+        PMU.enableALDO4();  // ALDO4 powers the LCD
+    } else {
+        PMU.disableALDO4();
+    }
+}
+
 namespace esphome {
 namespace axp2101 {
 
@@ -131,7 +139,7 @@ void AXP2101Component::setup()
     PMU.enableALDO1();
     PMU.enableALDO2();
     // PMU.enableALDO3(); // This is the speaker
-    PMU.enableALDO4();
+    PMU.enableALDO4(); // display power
     PMU.enableBLDO1();
     PMU.enableBLDO2();
     PMU.enableCPUSLDO();
