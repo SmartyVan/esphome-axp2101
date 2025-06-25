@@ -33,11 +33,9 @@ namespace axp2101 {
 
 void AXP2101Component::set_lcd_enabled(bool on) {
     if (on) {
-        PMU.enableALDO4();   // LCD logic
-        PMU.enableBLDO1();   // LCD backlight
+        PMU.enableBLDO1();  // backlight on
     } else {
-        PMU.disableBLDO1();  // Turn off backlight first
-        PMU.disableALDO4();  // Then LCD logic
+        PMU.disableBLDO1(); // backlight off only
     }
 }
 }  // namespace axp2101
