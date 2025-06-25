@@ -38,6 +38,7 @@ public:
   void set_brightness(float brightness) { brightness_ = brightness; }
   void set_model(AXP2101Model model) { this->model_ = model; }
   void set_lcd_enabled(bool on);
+  void set_blue_led(bool on);
 
   // ========== INTERNAL METHODS ==========
   // (In most use cases you won't need these)

@@ -31,12 +31,7 @@ void setFlag(void)
 namespace esphome {
 namespace axp2101 {
 
-void AXP2101Component::set_lcd_enabled(bool on) {
-    if (on) {
-        PMU.enableBLDO1();  // backlight on
-    } else {
-        PMU.disableBLDO1(); // backlight off only
-    }
+
 }
 }  // namespace axp2101
 }  // namespace esphome
@@ -303,6 +298,22 @@ void AXP2101Component::setup()
     PMU.setButtonBatteryChargeVoltage(3300);
 }
 
+// Screen enable
+void AXP2101Component::set_lcd_enabled(bool on) {
+    if (on) {
+        PMU.enableBLDO1();  // backlight on
+    } else {
+        PMU.disableBLDO1(); // backlight off only
+    }
+
+// LED on / off
+void AXP2101Component::set_blue_led(bool on) {
+  if (on) {
+    PMU.setChargingLedMode(XPOWERS_CHG_LED_ON);
+  } else {
+    PMU.setChargingLedMode(XPOWERS_CHG_LED_OFF);
+  }
+}
 void AXP2101Component::dump_config() {
   ESP_LOGCONFIG(TAG, "AXP2101:");
   LOG_I2C_DEVICE(this);
