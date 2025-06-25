@@ -37,6 +37,7 @@ public:
   void set_batterycharging_bsensor(binary_sensor::BinarySensor *batterycharging_bsensor) { batterycharging_bsensor_ = batterycharging_bsensor; }
   void set_brightness(float brightness) { brightness_ = brightness; }
   void set_model(AXP2101Model model) { this->model_ = model; }
+  void set_lcd_enabled(bool on);
 
   // ========== INTERNAL METHODS ==========
   // (In most use cases you won't need these)
