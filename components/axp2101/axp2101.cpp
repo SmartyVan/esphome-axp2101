@@ -297,6 +297,7 @@ void AXP2101Component::set_lcd_enabled(bool on) {
     } else {
         PMU.disableBLDO1(); // backlight off only
     }
+}
 
 // LED on / off
 void AXP2101Component::set_blue_led(bool on) {
@@ -306,6 +307,7 @@ void AXP2101Component::set_blue_led(bool on) {
     PMU.setChargingLedMode(XPOWERS_CHG_LED_OFF);
   }
 }
+
 void AXP2101Component::dump_config() {
   ESP_LOGCONFIG(TAG, "AXP2101:");
   LOG_I2C_DEVICE(this);
