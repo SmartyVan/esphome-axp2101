@@ -31,14 +31,6 @@ void setFlag(void)
 namespace esphome {
 namespace axp2101 {
 
-
-}
-}  // namespace axp2101
-}  // namespace esphome
-
-namespace esphome {
-namespace axp2101 {
-
 static const char *TAG = "axp2101.sensor";
 
 void AXP2101Component::setup()
