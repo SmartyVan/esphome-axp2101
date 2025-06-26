@@ -8,6 +8,7 @@ from esphome.const import (
     CONF_ID,
     CONF_MODEL,
     DEVICE_CLASS_BATTERY_CHARGING,
+    DEVICE_CLASS_BATTERY,
     DEVICE_CLASS_VOLTAGE,
     ENTITY_CATEGORY_DIAGNOSTIC,
     ICON_BATTERY,
@@ -44,6 +45,7 @@ CONFIG_SCHEMA = (
                 unit_of_measurement=UNIT_PERCENT,
                 accuracy_decimals=0,
                 icon=ICON_BATTERY,
+                device_class=DEVICE_CLASS_BATTERY,
             ),
             cv.Optional(CONF_BATTERY_CHARGING): binary_sensor.binary_sensor_schema(
                 device_class=DEVICE_CLASS_BATTERY_CHARGING,
