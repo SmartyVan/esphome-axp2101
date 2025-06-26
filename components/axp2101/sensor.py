@@ -44,7 +44,6 @@ CONFIG_SCHEMA = (
             cv.Optional(CONF_BATTERY_LEVEL): sensor.sensor_schema(
                 unit_of_measurement=UNIT_PERCENT,
                 accuracy_decimals=0,
-                icon=ICON_BATTERY,
                 device_class=DEVICE_CLASS_BATTERY,
             ),
             cv.Optional(CONF_BATTERY_CHARGING): binary_sensor.binary_sensor_schema(
