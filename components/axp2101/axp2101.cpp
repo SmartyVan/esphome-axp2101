@@ -308,6 +308,16 @@ void AXP2101Component::set_blue_led(bool on) {
   }
 }
 
+// SPEAKER on / off
+void AXP2101Component::set_speaker_enable(bool on) {
+    if (on) {
+        PMU.enableALDO3();  // speaker on
+    } else {
+        PMU.disableALDO3(); // speaker off
+    }
+}
+
+
 void AXP2101Component::dump_config() {
   ESP_LOGCONFIG(TAG, "AXP2101:");
   LOG_I2C_DEVICE(this);
