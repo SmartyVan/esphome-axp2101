@@ -309,7 +309,7 @@ void AXP2101Component::set_blue_led(bool on) {
 }
 
 // SPEAKER on / off
-void AXP2101Component::set_speaker_enable(bool on) {
+void AXP2101Component::set_speaker_enabled(bool on) {
     if (on) {
         PMU.enableALDO3();  // speaker on
     } else {
