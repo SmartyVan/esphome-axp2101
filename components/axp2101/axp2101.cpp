@@ -131,7 +131,7 @@ void AXP2101Component::setup()
     PMU.enableDC5();
     PMU.enableALDO1();
     PMU.enableALDO2();
-    PMU.enableALDO3(); // This is the speaker
+    // PMU.enableALDO3(); // This is the speaker
     PMU.enableALDO4(); // display power
     // PMU.enableBLDO1(); // LCD Backlight
     PMU.enableBLDO2();
