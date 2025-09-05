@@ -628,7 +628,7 @@ void AXP2101Component::SetSleep(void)
 void AXP2101Component::DeepSleep(uint64_t time_in_us)
 {
     SetSleep();
-    esp_sleep_enable_ext0_wakeup((gpio_num_t)37, 0 /* LOW */);
+    esp_sleep_enable_ext0_wakeup((gpio_num_t)39, 0 /* LOW */);
     if (time_in_us > 0)
     {
         esp_sleep_enable_timer_wakeup(time_in_us);
