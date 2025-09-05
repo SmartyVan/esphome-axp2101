@@ -792,7 +792,7 @@ void AXP2101Component::PowerOff()
     Write1Byte(0x32, Read8bit(0x32) | 0x80);
 }
 
-void AXP2101::power_off(void) {
+void AXP2101Component::power_off(void) {
     // 1. AXP2101 Power off
     bitOn(AXP2101_ADDR, 0x41, 1 << 1,
           400000);  // POWERON Negative Edge IRQ(ponne_irq_en) enable
