@@ -9,6 +9,8 @@
 #define XPOWERS_CHIP_AXP2101
 #include "XPowersLib.h"
 
+#define AXP2101_ADDR 0x34
+
 namespace esphome {
 namespace axp2101 {
 
