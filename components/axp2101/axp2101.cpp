@@ -792,6 +792,16 @@ void AXP2101Component::PowerOff()
     Write1Byte(0x32, Read8bit(0x32) | 0x80);
 }
 
+void AXP2101::power_off(void) {
+    // 1. AXP2101 Power off
+    bitOn(AXP2101_ADDR, 0x41, 1 << 1,
+          400000);  // POWERON Negative Edge IRQ(ponne_irq_en) enable
+    writeRegister8(AXP2101_ADDR, 0x25, 0b00011011,
+                   400000);  // sleep and wait for wakeup
+    delay(100);
+    writeRegister8(AXP2101_ADDR, 0x10, 0b00110001, 400000);  // power off
+}
+
 void AXP2101Component::SetAdcState(bool state)
 {
     Write1Byte(0x82, state ? 0xff : 0x00);

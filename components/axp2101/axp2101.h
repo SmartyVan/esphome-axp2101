@@ -40,7 +40,7 @@ public:
   void set_lcd_enabled(bool on);
   void set_blue_led(bool on);
   void set_speaker_enabled(bool on);
-  void power_off() { this->PowerOff(); }
+  void power_off();
 
   // ========== INTERNAL METHODS ==========
   // (In most use cases you won't need these)
