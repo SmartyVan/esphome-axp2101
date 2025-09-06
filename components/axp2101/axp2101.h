@@ -42,6 +42,10 @@ public:
   void set_lcd_enabled(bool on);
   void set_blue_led(bool on);
   void set_speaker_enabled(bool on);
+      // -- sleep
+  void SetSleep(void);
+  void DeepSleep(uint64_t time_in_us = 0);
+  void LightSleep(uint64_t time_in_us = 0);
 
   // ========== INTERNAL METHODS ==========
   // (In most use cases you won't need these)
@@ -90,10 +94,7 @@ protected:
     uint16_t GetVapsData(void) __attribute__((deprecated));
     uint8_t GetBtnPress(void);
 
-      // -- sleep
-    void SetSleep(void);
-    void DeepSleep(uint64_t time_in_us = 0);
-    void LightSleep(uint64_t time_in_us = 0);
+
 
     // void SetChargeVoltage( uint8_t );
     void  SetChargeCurrent( uint8_t );
