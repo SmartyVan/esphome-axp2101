@@ -787,46 +787,13 @@ void AXP2101Component::SetChargeCurrent(uint8_t current)
     Write1Byte(0x33, buf);
 }
 
-bool AXP2101Component::writeRegister8(uint8_t addr, uint8_t reg, uint8_t data,
-                             uint32_t freq) {
-    uint8_t result;
 
-    _wire->beginTransmission(addr);
-    _wire->write(reg);
-    _wire->write(data);
-    result = _wire->endTransmission();
-    if (result == 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool AXP2101Component::bitOn(uint8_t addr, uint8_t reg, uint8_t data, uint32_t freq) {
-    uint8_t temp;
-    uint8_t write_back;
-
-    temp       = readRegister8(addr, reg, freq);
-    write_back = (temp | data);
-    // Serial.printf("biton read 0x%X, data = 0x%X, write back 0x%X\r\n", temp,
-    // data, write_back);
-    return (writeRegister8(addr, reg, write_back, freq));
-}
 
 void AXP2101Component::PowerOff()
 {
     Write1Byte(0x32, Read8bit(0x32) | 0x80);
 }
 
-void AXP2101Component::power_off(void) {
-    // 1. AXP2101 Power off
-    bitOn(AXP2101_ADDR, 0x41, 1 << 1,
-          400000);  // POWERON Negative Edge IRQ(ponne_irq_en) enable
-    writeRegister8(AXP2101_ADDR, 0x25, 0b00011011,
-                   400000);  // sleep and wait for wakeup
-    delay(100);
-    writeRegister8(AXP2101_ADDR, 0x10, 0b00110001, 400000);  // power off
-}
 
 void AXP2101Component::SetAdcState(bool state)
 {
