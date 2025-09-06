@@ -626,17 +626,18 @@ uint16_t AXP2101Component::GetVapsData(void)
 
 void AXP2101Component::SetSleep(void)
 {
-    // Lower-power PMU prep
+    // PMU low-power prep
     Write1Byte(0x31, Read8bit(0x31) | (1 << 3));   // VOFF ~3.0 V
     Write1Byte(0x90, Read8bit(0x90) | 0x07);       // GPIO1 floating
     Write1Byte(0x82, 0x00);                        // Disable ADCs
 
-    // Disable most rails (your original behavior)…
+    // Start from your "kill almost everything" mask…
     uint8_t en = Read8bit(0x12);
-    en &= 0xA1;                                    // keep only DCDC1, etc.
+    en &= 0xA1;  // keep only essential (DCDC1, etc.)
 
-    // …but EXEMPT ALDO2 so the touch IC stays alive (needed for EXT0 wake on GPIO39)
-    en |= (1 << 2);                                // ALDO2 enable bit
+    // …but EXEMPT the rails needed for touch-to-wake:
+    en |= (1 << 2);  // ALDO2  (FT RST rail)
+    en |= (1 << 4);  // ALDO4  (3V3 logic rail powering FT6336U)
 
     Write1Byte(0x12, en);
 }
