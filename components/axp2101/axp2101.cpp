@@ -616,69 +616,14 @@ uint16_t AXP2101Component::GetVapsData(void)
     return vaps;
 }
 
-// void AXP2101Component::SetSleep(void)
-// {
-//     Write1Byte(0x31 , Read8bit(0x31) | ( 1 << 3)); // Power off voltag 3.0v
-//     Write1Byte(0x90 , Read8bit(0x90) | 0x07); // GPIO1 floating
-//     Write1Byte(0x82, 0x00); // Disable ADCs
-//     Write1Byte(0x12, Read8bit(0x12) & 0xA1); // Disable all outputs but DCDC1
-// }
-
-// void AXP2101Component::SetSleep(void)
-// {
-//     // PMU low-power prep
-//     Write1Byte(0x31, Read8bit(0x31) | (1 << 3));   // VOFF ~3.0 V
-//     Write1Byte(0x90, Read8bit(0x90) | 0x07);       // GPIO1 floating
-//     Write1Byte(0x82, 0x00);                        // Disable ADCs
-
-//     // Start from your "kill almost everything" mask…
-//     uint8_t en = Read8bit(0x12);
-//     en &= 0xA1;  // keep only essential (DCDC1, etc.)
-
-//     // …but EXEMPT the rails needed for touch-to-wake:
-//     en |= (1 << 2);  // ALDO2  (FT RST rail)
-//     en |= (1 << 4);  // ALDO4  (3V3 logic rail powering FT6336U)
-
-//     Write1Byte(0x12, en);
-// }
-
 void AXP2101Component::SetSleep(void)
 {
-  // PMU low-power prep
-  //Write1Byte(0x31, Read8bit(0x31) | (1 << 3)); // VOFF ~3.0 V
-  Write1Byte(0x90, Read8bit(0x90) | 0x07);     // GPIO1 floating
-  Write1Byte(0x82, 0x00);                      // Disable ADCs
-
-  // Disable *hogs* (don’t touch the DC bucks that feed ALDOs)
-  PMU.disableBLDO1();   // LCD backlight off
-  PMU.disableALDO3();   // speaker off
-  PMU.disableDLDO1();   // vib motor off (if present)
-  PMU.disableDLDO2();   // spare off (if present)
-  // Optional: if BLDO2 drives something external you don't need:
-  PMU.disableBLDO2();
-
-  // Ensure touch stays alive for EXT0 wake:
-  PMU.enableALDO1();
-  PMU.enableALDO2();    // FT6336U RST/rail
-  PMU.enableALDO4();    // 3V3 logic/display rail that feeds FT6336U
-  PMU.enableDC1();
-  PMU.enableDC3();
-
-  // Debug: read back enable register and API states
-  uint8_t en_before = Read8bit(0x12);
-  ESP_LOGD(TAG, "EN(0x12) before write: 0x%02X", en_before);
-  // (No blanket write to 0x12 here — we rely on PMU APIs.)
-
-  ESP_LOGD(TAG, "ALDO2:%s ALDO4:%s BLDO1:%s BLDO2:%s ALDO3:%s",
-           PMU.isEnableALDO2() ? "ON":"OFF",
-           PMU.isEnableALDO4() ? "ON":"OFF",
-           PMU.isEnableBLDO1() ? "ON":"OFF",
-           PMU.isEnableBLDO2() ? "ON":"OFF",
-           PMU.isEnableALDO3() ? "ON":"OFF");
-
-  // Small settle time so INT line goes high before deep sleep
-  delay(500);
+    Write1Byte(0x31 , Read8bit(0x31) | ( 1 << 3)); // Power off voltag 3.0v
+    Write1Byte(0x90 , Read8bit(0x90) | 0x07); // GPIO1 floating
+    Write1Byte(0x82, 0x00); // Disable ADCs
+    Write1Byte(0x12, Read8bit(0x12) & 0xA1); // Disable all outputs but DCDC1
 }
+
 
 // -- sleep
 void AXP2101Component::DeepSleep(uint64_t time_in_us)
