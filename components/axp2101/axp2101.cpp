@@ -616,12 +616,29 @@ uint16_t AXP2101Component::GetVapsData(void)
     return vaps;
 }
 
+// void AXP2101Component::SetSleep(void)
+// {
+//     Write1Byte(0x31 , Read8bit(0x31) | ( 1 << 3)); // Power off voltag 3.0v
+//     Write1Byte(0x90 , Read8bit(0x90) | 0x07); // GPIO1 floating
+//     Write1Byte(0x82, 0x00); // Disable ADCs
+//     Write1Byte(0x12, Read8bit(0x12) & 0xA1); // Disable all outputs but DCDC1
+// }
+
 void AXP2101Component::SetSleep(void)
 {
-    Write1Byte(0x31 , Read8bit(0x31) | ( 1 << 3)); // Power off voltag 3.0v
-    Write1Byte(0x90 , Read8bit(0x90) | 0x07); // GPIO1 floating
-    Write1Byte(0x82, 0x00); // Disable ADCs
-    Write1Byte(0x12, Read8bit(0x12) & 0xA1); // Disable all outputs but DCDC1
+    // Lower-power PMU prep
+    Write1Byte(0x31, Read8bit(0x31) | (1 << 3));   // VOFF ~3.0 V
+    Write1Byte(0x90, Read8bit(0x90) | 0x07);       // GPIO1 floating
+    Write1Byte(0x82, 0x00);                        // Disable ADCs
+
+    // Disable most rails (your original behavior)…
+    uint8_t en = Read8bit(0x12);
+    en &= 0xA1;                                    // keep only DCDC1, etc.
+
+    // …but EXEMPT ALDO2 so the touch IC stays alive (needed for EXT0 wake on GPIO39)
+    en |= (1 << 2);                                // ALDO2 enable bit
+
+    Write1Byte(0x12, en);
 }
 
 // -- sleep
