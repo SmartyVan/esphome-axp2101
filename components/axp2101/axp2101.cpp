@@ -645,7 +645,7 @@ uint16_t AXP2101Component::GetVapsData(void)
 void AXP2101Component::SetSleep(void)
 {
   // PMU low-power prep
-  Write1Byte(0x31, Read8bit(0x31) | (1 << 3)); // VOFF ~3.0 V
+  //Write1Byte(0x31, Read8bit(0x31) | (1 << 3)); // VOFF ~3.0 V
   Write1Byte(0x90, Read8bit(0x90) | 0x07);     // GPIO1 floating
   Write1Byte(0x82, 0x00);                      // Disable ADCs
 
