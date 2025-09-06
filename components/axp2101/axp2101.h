@@ -43,6 +43,8 @@ public:
   void set_blue_led(bool on);
   void set_speaker_enabled(bool on);
   void power_off();
+  bool bitOn(uint8_t addr, uint8_t reg, uint8_t data, uint32_t freq);
+  bool writeRegister8(uint8_t addr, uint8_t reg, uint8_t data, uint32_t freq);
 
   // ========== INTERNAL METHODS ==========
   // (In most use cases you won't need these)
