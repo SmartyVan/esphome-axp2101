@@ -786,6 +786,31 @@ void AXP2101Component::SetChargeCurrent(uint8_t current)
     buf = (buf & 0xf0) | (current & 0x07);
     Write1Byte(0x33, buf);
 }
+bool AXP2101::writeRegister8(uint8_t addr, uint8_t reg, uint8_t data,
+                             uint32_t freq) {
+    uint8_t result;
+
+    _wire->beginTransmission(addr);
+    _wire->write(reg);
+    _wire->write(data);
+    result = _wire->endTransmission();
+    if (result == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool AXP2101::bitOn(uint8_t addr, uint8_t reg, uint8_t data, uint32_t freq) {
+    uint8_t temp;
+    uint8_t write_back;
+
+    temp       = readRegister8(addr, reg, freq);
+    write_back = (temp | data);
+    // Serial.printf("biton read 0x%X, data = 0x%X, write back 0x%X\r\n", temp,
+    // data, write_back);
+    return (writeRegister8(addr, reg, write_back, freq));
+}
 
 void AXP2101Component::PowerOff()
 {
