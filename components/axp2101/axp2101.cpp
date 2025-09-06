@@ -658,6 +658,7 @@ void AXP2101Component::SetSleep(void)
   PMU.disableBLDO2();
 
   // Ensure touch stays alive for EXT0 wake:
+  PMU.enableALDO1();
   PMU.enableALDO2();    // FT6336U RST/rail
   PMU.enableALDO4();    // 3V3 logic/display rail that feeds FT6336U
 
