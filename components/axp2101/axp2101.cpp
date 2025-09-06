@@ -786,7 +786,8 @@ void AXP2101Component::SetChargeCurrent(uint8_t current)
     buf = (buf & 0xf0) | (current & 0x07);
     Write1Byte(0x33, buf);
 }
-bool AXP2101::writeRegister8(uint8_t addr, uint8_t reg, uint8_t data,
+
+bool AXP2101Component::writeRegister8(uint8_t addr, uint8_t reg, uint8_t data,
                              uint32_t freq) {
     uint8_t result;
 
@@ -801,7 +802,7 @@ bool AXP2101::writeRegister8(uint8_t addr, uint8_t reg, uint8_t data,
     }
 }
 
-bool AXP2101::bitOn(uint8_t addr, uint8_t reg, uint8_t data, uint32_t freq) {
+bool AXP2101Component::bitOn(uint8_t addr, uint8_t reg, uint8_t data, uint32_t freq) {
     uint8_t temp;
     uint8_t write_back;
 
