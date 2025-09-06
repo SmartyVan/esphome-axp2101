@@ -674,7 +674,7 @@ void AXP2101Component::SetSleep(void)
            PMU.isEnableALDO3() ? "ON":"OFF");
 
   // Small settle time so INT line goes high before deep sleep
-  delay(5);
+  delay(500);
 }
 
 // -- sleep
