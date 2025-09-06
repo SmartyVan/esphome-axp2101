@@ -661,6 +661,8 @@ void AXP2101Component::SetSleep(void)
   PMU.enableALDO1();
   PMU.enableALDO2();    // FT6336U RST/rail
   PMU.enableALDO4();    // 3V3 logic/display rail that feeds FT6336U
+  PMU.enableDC1();
+  PMU.enableDC3();
 
   // Debug: read back enable register and API states
   uint8_t en_before = Read8bit(0x12);
