@@ -456,6 +456,7 @@ void AXP2101Component::UpdateBrightness() {
     uint8_t reg = (Read8bit(0x96) & 0xE0) | (step & 0x1F);
     ESP_LOGD(TAG, "Setting BLDO1 step %u for brightness=%f", step, brightness_);
     Write1Byte(0x96, reg);
+    PMU.enableBLDO1();
 }
 
 bool AXP2101Component::GetBatState()
