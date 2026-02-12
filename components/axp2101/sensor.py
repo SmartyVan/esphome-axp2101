@@ -62,8 +62,6 @@ def to_code(config):
     yield cg.register_component(var, config)
     yield i2c.register_i2c_device(var, config)
 
-    cg.add_library("XPowersLib", "^0.3.2", "https://github.com/lewisxhe/XPowersLib.git")
-
     cg.add(var.set_model(config[CONF_MODEL]))
 
     if CONF_BATTERY_VOLTAGE in config:
