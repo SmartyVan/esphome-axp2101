@@ -2,6 +2,9 @@
 
 This custom component implements AXP2101 support for the M5Stack Core2 V1.1, building on top of https://github.com/martydingo/esphome-axp192 and https://github.com/lewisxhe/XPowersLib. The Core2 V1.1 uses an AXP2101 while the older Core2 uses an AXP192.
 
+> [!IMPORTANT]
+> The xPowers library has been removed from this component in favor of direct register writes due to conflicts with ESPHome's move to ESP-IDF's native I2C driver
+
 *This component does not offer full functionality yet, it only covers part of the AXP2101 features and is not fully tested.*  
 
 ## Installation
